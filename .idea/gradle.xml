@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/gird" />
             <option value="$PROJECT_DIR$/uicode" />
+            <option value="$PROJECT_DIR$/uixml" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

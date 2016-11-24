@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/gird/gird.iml" filepath="$PROJECT_DIR$/gird/gird.iml" />
       <module fileurl="file://$PROJECT_DIR$/uicode/uicode.iml" filepath="$PROJECT_DIR$/uicode/uicode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/uixml/uixml.iml" filepath="$PROJECT_DIR$/uixml/uixml.iml" />
     </modules>
   </component>
 </project>

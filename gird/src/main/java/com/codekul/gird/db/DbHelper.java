@@ -1,4 +1,4 @@
-package com.codekul.gird;
+package com.codekul.gird.db;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +10,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func0;
 
 /**
  * Created by aniruddha on 23/11/16.
@@ -26,13 +31,36 @@ public class DbHelper  extends SQLiteOpenHelper{
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
 
-        createTables(db);
+        Observable<String> ob = Observable.defer(new Func0<Observable<String>>() {
+            @Override
+            public Observable<String> call() {
+                createTables(db);
 
-        insertData(db);
+                insertData(db);
 
-        readPanchang(db);
+                readPanchang(db);
+
+                return null;
+            }
+        });
+        ob.subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+                Log.i("@melayer","Db Ops completed");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("@melayer","Db Ops Error "+e);
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.i("@melayer","Db Ops next "+s);
+            }
+        });
     }
 
     @Override

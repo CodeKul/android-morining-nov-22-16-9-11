@@ -6,10 +6,9 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
-import java.io.IOException;
-import java.io.InputStream;
+import com.codekul.gird.db.DbHelper;
+
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,1 +1,1 @@
-include ':app', ':uicode', ':gird'
+include ':app', ':uicode', ':gird', ':uixml'
