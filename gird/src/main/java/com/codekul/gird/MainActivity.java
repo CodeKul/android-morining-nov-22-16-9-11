@@ -34,28 +34,8 @@ public class MainActivity extends AppCompatActivity {
         final GridLayout layoutRoot = (GridLayout) findViewById(R.id.calendarLayout);
         layoutRoot.removeAllViews();
 
-        new AsyncTask<Void,Integer,Void>(){
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                for (int r = 0; r < calendar.length; r++) {
-                    for (int c = 0; c < calendar[r].length; c++) {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        publishProgress(calendar[r][c]);
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                super.onProgressUpdate(values);
-
+        for (int row = 0; row < calendar.length; row++) {
+            for (int col = 0; col < calendar[row].length; col++) {
                 TextView text = new TextView(MainActivity.this);
 
                 GridLayout.LayoutParams lParams =
@@ -65,18 +45,16 @@ public class MainActivity extends AppCompatActivity {
                 lParams.width = 0;
                 text.setLayoutParams(lParams);
                 text.setGravity(Gravity.CENTER);
-                text.setText("" + values[0]);
+                text.setText("" + calendar[row][col]);
                 layoutRoot.addView(text);
             }
-        }.execute();
+        }
     }
 
     private int [][] createCalendarMatrix(int year, int month) {
 
         int lastDay = getLastDayNum(year, month);
-        //int lastDay = 32;
         int firstDay = getFirstDayNum(year, month);
-        //int firstDay = 7;
 
         Log.i("@codekul","Year - "+year);
         Log.i("@codekul","Month - "+month);
