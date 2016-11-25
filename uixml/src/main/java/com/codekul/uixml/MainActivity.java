@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
 //        btnOkay.setOnClickListener(new Click());
-
-
     }
 
    /* private class Click implements View.OnClickListener {

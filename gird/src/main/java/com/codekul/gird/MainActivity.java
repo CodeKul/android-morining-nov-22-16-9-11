@@ -1,56 +1,170 @@
 package com.codekul.gird;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayout;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-
-import com.codekul.gird.db.DbHelper;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
-//A1:K366
+    //A1:K366
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.i("@melayer",""+getFirstDay(new GregorianCalendar(), 2017,1));
-
-        new DbHelper(this, "myDb", null, 1).getWritableDatabase();
+        findViewById(R.id.btnOkay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createCalendarView(Integer.parseInt(((EditText)findViewById(R.id.edtYear)).getText().toString()),Integer.parseInt(((EditText)findViewById(R.id.edtMonth)).getText().toString()));
+            }
+        });
     }
 
-    private void createGrid(){
+    private void createCalendarView(int year, int month) {
 
-        ((GridView)findViewById(R.id.gridCalendar)).setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1));
+        final int [][]calendar  = createCalendarMatrix(year,month);
+
+        final GridLayout layoutRoot = (GridLayout) findViewById(R.id.calendarLayout);
+        layoutRoot.removeAllViews();
+
+        new AsyncTask<Void,Integer,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                for (int r = 0; r < calendar.length; r++) {
+                    for (int c = 0; c < calendar[r].length; c++) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        publishProgress(calendar[r][c]);
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+
+                TextView text = new TextView(MainActivity.this);
+
+                GridLayout.LayoutParams lParams =
+                        new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),
+                                GridLayout.spec(GridLayout.UNDEFINED, 1f));
+
+                lParams.width = 0;
+                text.setLayoutParams(lParams);
+                text.setGravity(Gravity.CENTER);
+                text.setText("" + values[0]);
+                layoutRoot.addView(text);
+            }
+        }.execute();
     }
 
-    private String getFirstDay(Calendar calendar, int year, int month){
+    private int [][] createCalendarMatrix(int year, int month) {
+
+        int lastDay = getLastDayNum(year, month);
+        //int lastDay = 32;
+        int firstDay = getFirstDayNum(year, month);
+        //int firstDay = 7;
+
+        Log.i("@codekul","Year - "+year);
+        Log.i("@codekul","Month - "+month);
+        Log.i("@codekul","First Day - "+firstDay);
+        Log.i("@codekul","Last Day - "+lastDay);
+        Log.i("@codekul","First Day Text - "+getFirstDay(year,month));
+
+        int[][] calendar = new int[7][5];
+
+        int dayCounter = 1;
+
+        for (int row = firstDay - 1, col = 0; col < 5; ) {
+            if (row >= 7 && col <= 5) {
+                col++;
+                row = 0;
+            } else {
+                calendar[row][col] = dayCounter > lastDay ? 0 : dayCounter++;
+                row++;
+            }
+        }
+
+        Log.i("@codekul","Difference - "+ (lastDay - dayCounter));
+        if((lastDay - dayCounter) == 0 || (lastDay - dayCounter) == 1) {
+            Log.i("@codekul","Difference - "+ (lastDay - dayCounter));
+            for(int i = 0 ; i <= (lastDay - dayCounter)+1; i++) {
+                calendar[i][0] = dayCounter++;
+            }
+        }
+
+        printCalendar(calendar);
+
+        return calendar;
+    }
+
+    private void printCalendar(int[][] calendar) {
+        for (int r = 0; r < calendar.length; r++) {
+            for (int c = 0; c < calendar[r].length; c++)
+                System.out.print(calendar[r][c] + " ");
+            System.out.println();
+        }
+    }
+
+    private int getLastDayNum(int year, int month) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+
+        int day = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        return day;
+    }
+
+    private int getFirstDayNum(int year, int month) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        return day;
+    }
+
+    private String getFirstDay(int year, int month) {
         String weekDay = "";
 
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH,month - 1);
-        calendar.set(Calendar.DAY_OF_MONTH,1);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 
         if (Calendar.MONDAY == day) {
-            weekDay = "सोम";
+            weekDay = "MON";
         } else if (Calendar.TUESDAY == day) {
-            weekDay = "मंगळ";
+            weekDay = "TUE";
         } else if (Calendar.WEDNESDAY == day) {
-            weekDay = "बुध";
+            weekDay = "WED";
         } else if (Calendar.THURSDAY == day) {
-            weekDay = "गुरु";
+            weekDay = "THU";
         } else if (Calendar.FRIDAY == day) {
-            weekDay = "शुक्र";
+            weekDay = "FRI";
         } else if (Calendar.SATURDAY == day) {
-            weekDay = "शनी";
+            weekDay = "SAT";
         } else if (Calendar.SUNDAY == day) {
-            weekDay = "रवी";
+            weekDay = "SUN";
         }
         return weekDay;
     }
