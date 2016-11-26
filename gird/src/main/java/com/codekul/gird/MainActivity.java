@@ -1,6 +1,5 @@
 package com.codekul.gird;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
@@ -31,24 +30,29 @@ public class MainActivity extends AppCompatActivity {
 
         final int [][]calendar  = createCalendarMatrix(year,month);
 
-        final GridLayout layoutRoot = (GridLayout) findViewById(R.id.calendarLayout);
+        GridLayout layoutRoot = (GridLayout) findViewById(R.id.calendarLayout);
         layoutRoot.removeAllViews();
 
         for (int row = 0; row < calendar.length; row++) {
             for (int col = 0; col < calendar[row].length; col++) {
-                TextView text = new TextView(MainActivity.this);
-
-                GridLayout.LayoutParams lParams =
-                        new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),
-                                GridLayout.spec(GridLayout.UNDEFINED, 1f));
-
-                lParams.width = 0;
-                text.setLayoutParams(lParams);
-                text.setGravity(Gravity.CENTER);
-                text.setText("" + calendar[row][col]);
-                layoutRoot.addView(text);
+                if(col == 0) addCalendarCell(getDayNameFromRow(row),layoutRoot);
+                addCalendarCell(""+calendar[row][col],layoutRoot);
             }
         }
+    }
+
+    private void addCalendarCell(String text, GridLayout layoutRoot){
+        TextView textCell = new TextView(this);
+
+        GridLayout.LayoutParams lParams =
+                new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),
+                        GridLayout.spec(GridLayout.UNDEFINED, 1f));
+
+        lParams.width = 0;
+        textCell.setLayoutParams(lParams);
+        textCell.setGravity(Gravity.CENTER);
+        textCell.setText(text);
+        layoutRoot.addView(textCell);
     }
 
     private int [][] createCalendarMatrix(int year, int month) {
@@ -145,5 +149,20 @@ public class MainActivity extends AppCompatActivity {
             weekDay = "SUN";
         }
         return weekDay;
+    }
+
+    private String getDayNameFromRow(int row){
+        String day = "";
+
+        if(row == 0) day = "SUN";
+        if(row == 1) day = "MON";
+        if(row == 2) day = "TUE";
+        if(row == 3) day = "WED";
+        if(row == 4) day = "THU";
+        if(row == 5) day = "FRI";
+        if(row == 6) day = "SAT";
+
+        return day;
+
     }
 }

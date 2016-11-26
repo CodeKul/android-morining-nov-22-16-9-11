@@ -48,7 +48,7 @@
         android:id="@+id/calendarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:columnCount="5">
+        app:columnCount="6">
 
     </android.support.v7.widget.GridLayout>
 </LinearLayout>
