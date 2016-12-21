@@ -1,5 +1,6 @@
 package com.codekul.gird;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
@@ -7,7 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import java.util.Calendar;
 
@@ -35,23 +36,33 @@ public class MainActivity extends AppCompatActivity {
 
         for (int row = 0; row < calendar.length; row++) {
             for (int col = 0; col < calendar[row].length; col++) {
-                if(col == 0) addCalendarCell(getDayNameFromRow(row),layoutRoot);
-                addCalendarCell(""+calendar[row][col],layoutRoot);
+                if(col == 0) addCalendarCell(getDayNameFromRow(row),layoutRoot,true);
+                addCalendarCell(""+calendar[row][col],layoutRoot,false);
             }
         }
     }
 
-    private void addCalendarCell(String text, GridLayout layoutRoot){
-        TextView textCell = new TextView(this);
+    private void addCalendarCell(String text, GridLayout layoutRoot, Boolean isFirst){
 
-        GridLayout.LayoutParams lParams =
-                new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),
-                        GridLayout.spec(GridLayout.UNDEFINED, 1f));
+        GridLayout.LayoutParams lParams = null;
+        ImageView textCell = new ImageView(this);
+        if(!isFirst) {
+            lParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.LEFT),
+                    GridLayout.spec(GridLayout.UNDEFINED, 10f));
+            textCell.setImageResource(R.drawable._1);
+        }
+        else {
+            lParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.LEFT),
+                    GridLayout.spec(GridLayout.UNDEFINED, 10f));
+//            textCell.setBackgroundColor(Color.GRAY);
+            textCell.setImageResource(getDayNameFromRowImage(text));
+        }
 
         lParams.width = 0;
+        lParams.height = 100;
+        lParams.bottomMargin = 5;
         textCell.setLayoutParams(lParams);
-        textCell.setGravity(Gravity.CENTER);
-        textCell.setText(text);
+
         layoutRoot.addView(textCell);
     }
 
@@ -164,5 +175,22 @@ public class MainActivity extends AppCompatActivity {
 
         return day;
 
+    }
+
+    private int getDayNameFromRowImage(String day){
+        int dayImage = 1;
+
+        if(day.equals("SUN")) dayImage = R.drawable.sunday;
+        if(day.equals("MON")) dayImage = R.drawable.monday;
+        if(day.equals("TUE")) dayImage = R.drawable.tuesday;
+        if(day.equals("WED")) dayImage = R.drawable.wednesday;
+        if(day.equals("THU")) dayImage = R.drawable.thursday;
+        if(day.equals("FRI")) dayImage = R.drawable.friday;
+        if(day.equals("SAT")) dayImage = R.drawable.sunday;
+        return dayImage;
+    }
+
+    public int getImageForDay(String day){
+        return Integer.parseInt(day);
     }
 }
