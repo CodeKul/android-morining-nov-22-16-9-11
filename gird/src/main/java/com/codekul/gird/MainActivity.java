@@ -1,14 +1,16 @@
 package com.codekul.gird;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
-import android.view.Gravity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.Calendar;
 
@@ -45,25 +47,42 @@ public class MainActivity extends AppCompatActivity {
     private void addCalendarCell(String text, GridLayout layoutRoot, Boolean isFirst){
 
         GridLayout.LayoutParams lParams = null;
+
         ImageView textCell = new ImageView(this);
+        textCell.setAdjustViewBounds(true);
         if(!isFirst) {
-            lParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.LEFT),
-                    GridLayout.spec(GridLayout.UNDEFINED, 10f));
+            lParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),
+                    GridLayout.spec(GridLayout.UNDEFINED, 1f));
             textCell.setImageResource(R.drawable._1);
         }
         else {
-            lParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.LEFT),
-                    GridLayout.spec(GridLayout.UNDEFINED, 10f));
-//            textCell.setBackgroundColor(Color.GRAY);
-            textCell.setImageResource(getDayNameFromRowImage(text));
+            lParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),
+                    GridLayout.spec(GridLayout.UNDEFINED, 1f));
+            textCell.setImageResource(R.drawable.friday);
         }
 
+
+        float ht_px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+
+
         lParams.width = 0;
-        lParams.height = 100;
+        lParams.height = (int) ht_px;
+
+        Log.i("@codekul","Height - "+lParams.height);
         lParams.bottomMargin = 5;
         textCell.setLayoutParams(lParams);
 
         layoutRoot.addView(textCell);
+    }
+
+    public int dpToPx(int dp)
+    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public  int pxToDp(int px)
+    {
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
     private int [][] createCalendarMatrix(int year, int month) {
@@ -180,14 +199,14 @@ public class MainActivity extends AppCompatActivity {
     private int getDayNameFromRowImage(String day){
         int dayImage = 1;
 
-        if(day.equals("SUN")) dayImage = R.drawable.sunday;
+        /*if(day.equals("SUN")) dayImage = R.drawable.sunday;
         if(day.equals("MON")) dayImage = R.drawable.monday;
         if(day.equals("TUE")) dayImage = R.drawable.tuesday;
         if(day.equals("WED")) dayImage = R.drawable.wednesday;
         if(day.equals("THU")) dayImage = R.drawable.thursday;
         if(day.equals("FRI")) dayImage = R.drawable.friday;
-        if(day.equals("SAT")) dayImage = R.drawable.sunday;
-        return dayImage;
+        if(day.equals("SAT")) dayImage = R.drawable.sunday;*/
+        return R.drawable.friday;
     }
 
     public int getImageForDay(String day){

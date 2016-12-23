@@ -44,11 +44,16 @@
             android:hint="Okay"/>
 
     </LinearLayout>
-    <android.support.v7.widget.GridLayout
-        android:id="@+id/calendarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:columnCount="6">
 
-    </android.support.v7.widget.GridLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/calendarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:columnCount="6">
+
+        </android.support.v7.widget.GridLayout>
+    </ScrollView>
 </LinearLayout>
